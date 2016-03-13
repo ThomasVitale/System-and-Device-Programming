@@ -85,7 +85,7 @@ void *client1() {
 	
 	if ((fv1 = fopen("fv1.b", "r")) == NULL) {
 		fprintf(stderr, "%s", "Error opening file fv1.b");
-		return (void*)-3;
+		return (void*)-4;
 	}
 
 	while(1) {
@@ -121,7 +121,7 @@ void *client2() {
 	
 	if ((fv2 = fopen("fv2.b", "r")) == NULL) {
 		fprintf(stderr, "%s", "Error opening file fv2.b");
-		return (void*)-4;
+		return (void*)-5;
 	}
 
 	while(1) {

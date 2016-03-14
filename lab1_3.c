@@ -1,3 +1,6 @@
+// System and Device Programming
+// Lab 1, excercise 3
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <semaphore.h>
@@ -41,6 +44,11 @@ int main() {
 
 	pthread_t tid1, tid2;
 	
+	// This thread is signaled when the two clients thread finished.
+	// Here a flag is used in order to know when to stop the while loop.
+	// Another way to do this is creating another thread that executes
+	// the loop, while the main thread waits using pthread_join() instructions.
+	
 	if (signal(SIGUSR1, manager) == SIG_ERR) {
 		fprintf(stderr, "Error SIGUSR1\n");
 		return -1;
@@ -65,7 +73,7 @@ int main() {
 		fprintf(stderr, "Error creating thread 2 \n");
 		return -3;
 	}
-	
+	 
 	while(1) {
 		sem_wait(process);
 		n *= 2;
@@ -84,7 +92,7 @@ void *client1() {
 	FILE *fv1;
 	
 	if ((fv1 = fopen("fv1.b", "r")) == NULL) {
-		fprintf(stderr, "%s", "Error opening file fv1.b");
+		fprintf(stderr, "Error opening file fv1.b");
 		return (void*)-4;
 	}
 
@@ -120,7 +128,7 @@ void *client2() {
 	FILE *fv2;
 	
 	if ((fv2 = fopen("fv2.b", "r")) == NULL) {
-		fprintf(stderr, "%s", "Error opening file fv2.b");
+		fprintf(stderr, "Error opening file fv2.b");
 		return (void*)-5;
 	}
 
@@ -149,14 +157,3 @@ void *client2() {
 	
 	pthread_exit(NULL);
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,6 @@
+// System and Device Programming
+// Lab 1, excercise 2
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,7 +74,7 @@ int main(int argc, char** argv) {
 	pid = fork();
 	
 	if (pid == -1) { // error
-		fprintf(stderr, "%s", "Error with the fork operation!\n");
+		fprintf(stderr, "Error with the fork operation!\n");
 		return -4;
 	} else if (pid > 0) { // the father
 		
@@ -98,7 +101,7 @@ int main(int argc, char** argv) {
 	} else { // the child
 	
 		if (pthread_create(&tid, NULL, lastSignal, NULL) != 0) {
-			fprintf(stderr, "%s", "Error generating the thread lastSignal");
+			fprintf(stderr, "Error generating the thread lastSignal");
 			return -6;
 		}
 	

@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
 	
 	n = atoi(argv[1]); // total number to be generated
 	
+	/* Open binary file for writing */
 	if ((fb_out = fopen(argv[2], "wb")) == NULL) {
 		fprintf(stderr, "Error opening the output file.\n");
 		return -2;

@@ -14,7 +14,7 @@ float *v, *v1, *v2;
 float **mat;
 Counter C;
 
-void* operation(void* arg) {
+void* operation (void* arg) {
 	int* argT = arg;
 	int i = *argT;
 	int j;

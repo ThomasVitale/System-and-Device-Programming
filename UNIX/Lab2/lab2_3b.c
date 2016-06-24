@@ -14,7 +14,7 @@ float *v, *v1, *v2;
 float **mat;
 Counter C;
 
-void* operation (void* arg) {
+void* operation(void* arg) {
 	int* argT = arg;
 	int i = *argT;
 	int j;
@@ -54,8 +54,9 @@ int main (int argc, char** argv) {
 	int* arg;
 	pthread_t th;
 
+	/* Check arguments */
 	if (argc != 2) {
-		fprintf(stderr, "Syntax: %s k", argv[0]);
+		fprintf(stderr, "Wrong number of arguments. Syntax: %s k", argv[0]);
 		return -1;
 	}
 	

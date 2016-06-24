@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 	void* ret;
 
 	if (argc != 2) {
-		fprintf(stderr, "Syntax: %s k\n", argv[0]);
+		fprintf(stderr, "Wrong number of arguments. Syntax: %s k\n", argv[0]);
 		return -1;
 	}
 	
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 		*arg_th = i;
 		if (pthread_create(&students_th[i], NULL, student, arg_th)) {
 			fprintf(stderr, "Error creating student %d\n", i);
-			return -2;
+			return -1;
 		}
 	}
 	
@@ -65,14 +65,14 @@ int main(int argc, char** argv) {
 		*arg_th = i;
 		if (pthread_create(&offices_th[i], NULL, office, arg_th)) {
 			fprintf(stderr, "Error creating office %d\n", i);
-			return -3;
+			return -1;
 		}
 	}
 	
 	/* Create special office */
 	if (pthread_create(&special_office_th, NULL, specialOffice, NULL)) {
 			fprintf(stderr, "Error creating special office\n");
-			return -4;
+			return -1;
 		}
 
 	pthread_exit(&ret);

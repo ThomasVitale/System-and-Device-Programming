@@ -10,8 +10,9 @@ int main (int argc, char** argv) {
 	float *v, *v1, *v2;
 	float **mat;
 
+	/* Check arguments */
 	if (argc != 2) {
-		fprintf(stderr, "Syntax: %s k", argv[0]);
+		fprintf(stderr, "Wrong number of arguments. Syntax: %s k", argv[0]);
 		return -1;
 	}
 	

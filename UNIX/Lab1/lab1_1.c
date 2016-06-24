@@ -1,153 +1,126 @@
-// System and Device Programming
-// Lab 1, excercise 1
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-int randomNumber(int min, int max);
-void sortVector(int* v, int n);
-void printVector(int* v, int n);
+void fillArray(int* v, int n, int min, int max);
+void sortArray(int* v, int n);
+void writeArray(int* v, int n, char* filename);
+void writeArrayBin(int* v, int n, char* filename);
 
 int main(int argc, char** argv) {
 	
 	int n1, n2;
 	int *v1, *v2;
-	int i;
-	FILE *fv1, *fv2, *fv1b, *fv2b;
-	
-	srand(time(NULL)); // Seeding the rand() function
 
-	// Takes from the command line two integer numbers n1, n2
-
+	/* Check arguments */
 	if (argc != 3) {
-		fprintf(stderr, "Error! The format is: %s int1 int2 \n", argv[0]);
+		fprintf(stderr, "Wrong number of parameters. Syntax: %s n1 n2\n", argv[0]);
 		return -1;
 	}
-
+	
+	/* Get the two arguments */
 	n1 = atoi(argv[1]);
 	n2 = atoi(argv[2]);
-
-	// Allocates two vectors v1 and v2, of dimensions n1 and n2, respectively
-
-	v1 = (int*) malloc(n1*sizeof(int));
-	v2 = (int*) malloc(n2*sizeof(int));
 	
-	// Fills v1 with n1 random numbers between 10-100
-
-	for (i=0; i<n1; i++) {
-		v1[i] = randomNumber(10, 100);
-	}
-	fprintf(stdout, "Vector v1: ");
-	printVector(v1, n1);
+	/* Allocate the two arrays */
+	v1 = (int*)malloc(n1*sizeof(int));
+	v2 = (int*)malloc(n2*sizeof(int));
 	
-	// Fills v2 with n2 random numbers between 20-100
-
-	for (i=0; i<n2; i++) {
-		v2[i] = randomNumber(20, 100);
-	}
-	fprintf(stdout, "Vector v2: ");
-	printVector(v2, n2);
+	/* Fill the two arrays */
+	fillArray(v1, n1, 10, 100);
+	fillArray(v2, n2, 20, 100);
 	
-	// Sort v1 and v2 (increasing values)
+	/* Sort the two arrays */
+	sortArray(v1, n1);
+	sortArray(v2, n2);
 	
-	sortVector(v1, n1);
-	sortVector(v2, n2);
+	/* Write v1 and v2 in two text files */
+	writeArray(v1, n1, "fv1.txt");
+	writeArray(v2, n2, "fv2.txt");
 	
-	fprintf(stdout, "Vector v1 (sorted): ");
-	printVector(v1, n1);
-	fprintf(stdout, "Vector v2 (sorted): ");
-	printVector(v2, n2);
-
-	// Save the content of vectors v1 and v2 in two text files fv1.txt and fv2.txt, respectively
-
-	if ((fv1 = fopen("fv1.txt", "w+")) == NULL) {
-		fprintf(stderr, "Error opening fv1.txt\n");
-		return -2;
-	}
-
-	if ((fv2 = fopen("fv2.txt", "w+")) == NULL) {
-		fprintf(stderr, "Error opening fv2.txt\n");
-		return -3;
-	}
-
-	for (i=0; i<n1; i++) {
-		fprintf(fv1, "%d ", v1[i]);
-	}
-	fprintf(stdout, "File fv1.txt scritto con successo \n");
-	
-	for (i=0; i<n2; i++) {
-		fprintf(fv2, "%d ", v2[i]);
-	}
-	fprintf(stdout, "File fv2.txt scritto con successo \n");
-	
-	fclose(fv1);
-	fclose(fv2);
-
-	// Save the content of vectors v1 and v2 in two binary files fv1.b and fv2.b, respectively
-	
-	if ((fv1b = fopen("fv1.b", "w+")) == NULL) {
-		fprintf(stderr, "Error opening fv1.b\n");
-		return -4;
-	}
-
-	if ((fv2b = fopen("fv2.b", "w+")) == NULL) {
-		fprintf(stderr, "Error opening fv2.b\n");
-		return -5;
-	}
-	
-	if (fwrite(v1, sizeof(int), n1, fv1b) != n1) {
-		fprintf(stderr, "Error writing fv1.b");
-		return -6;
-	}
-	fprintf(stdout, "File fv1.b scritto con successo \n");
-	
-	if (fwrite(v2, sizeof(int), n2, fv2b) != n2) {
-		fprintf(stderr, "Error writing fv2.b");
-		return -7;
-	}
-	fprintf(stdout, "File fv2.b scritto con successo \n");
-	
-	fclose(fv1b);
-	fclose(fv2b);
+	/* Write v1 and v2 in two binary files */
+	writeArrayBin(v1, n1, "fv1.b");
+	writeArrayBin(v2, n2, "fv2.b");
 	
 	return 0;
 }
 
-int randomNumber(int min, int max) {
+/* Fill an array with random numbers within a specified range */
+void fillArray(int* v, int n, int min, int max) {
 
-	int result;
-
-	result = (rand() % (max - min + 1)) + min;
-
-	return result;
-
-}
-
-void sortVector(int* v, int n) {
-	int i, j, min, tmp;
-
-	for (i=0; i<n-1; i++) {
-		min = i;
-		for (j=i+1; j<n; j++) {
-			if (v[j] < v[min]) {
-				min = j;
-			}
-		}
-		tmp = v[i];
-		v[i] = v[min];
-		v[min] = tmp;
+	int i, range;
+	
+	/* Compute the range */
+	range = max - min;
+	
+	/* Seed the rand() function */
+	srand(time(NULL));
+	
+	for (i=0; i<n; i++) {
+		v[i] = (rand() % (range+1)) + min;
 	}
 
 	return;
 }
 
-void printVector(int* v, int n) {
-	int i;
-
-	for (i=0; i<n; i++) {
-		fprintf(stdout, "%d ", v[i]);
+/* Sort an array usign the Bubble Sort algorithm */
+void sortArray(int* v, int n) {
+	
+	int i, j, tmp;
+	
+	/* Bubble sort */
+	for (i=0; i<n-1; i++) {
+		for (j=i; j<n-1-i; j++) {
+			if (v[j] > v[j+1]) {
+				tmp = v[j];
+				v[j] = v[j+1];
+				v[j+1] = tmp;
+			}
+		}
 	}
+	
+	return;
+}
 
-	fprintf(stdout, "\n");
+/* Save an array into a text file */
+void writeArray(int* v, int n, char* filename) {
+
+	FILE* fp;
+	int i;
+	
+	if ((fp = fopen(filename, "w")) == NULL) {
+		fprintf(stderr, "Error opening the file %s for writing.\n", filename);
+		return;
+	}
+	
+	for (i=0; i<n; i++) {
+		fprintf(fp, "%d ", v[i]);
+	}
+	fprintf(fp, "\n");
+	
+	fclose(fp);
+	
+	return;
+
+}
+
+/* Save an array into a binary file */
+void writeArrayBin(int* v, int n, char* filename) {
+
+	FILE* fp;
+	
+	if ((fp = fopen(filename, "wb")) == NULL) {
+		fprintf(stderr, "Error opening the file %s for writing.\n", filename);
+		return;
+	}
+	
+	if (fwrite(v, sizeof(int), n, fp) != n) {
+		fprintf(stderr, "Error writing the file %s.\n", filename);
+		return;
+	}
+	
+	fclose(fp);
+	
+	return;
+
 }
